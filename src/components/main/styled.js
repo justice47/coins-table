@@ -10,7 +10,10 @@ const Container = styled.div`
 `;
 
 const MainWrap = styled.div`
-  padding: 20px 0;
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -18,4 +21,58 @@ const MainWrap = styled.div`
   align-items: start;
 `;
 
-export { Container, MainWrap };
+const TableWrap = styled.div`
+  width: 100%;
+  height: 90vh;
+  overflow: scroll;
+`;
+
+const Table = styled.table`
+  user-select: none;
+`;
+
+const TableBodyTR = styled.tr`
+  height: 30px;
+`;
+
+const TableHeadTR = styled.tr`
+  top: 0;
+  position: sticky;
+`;
+
+const TableBodyTD = styled.td`
+  text-align: center;
+  min-width: 70px;
+  max-width: 70px;
+  overflow: hidden;
+`;
+
+const TableBodyTH = styled.th`
+  position: sticky;
+  left: 0;
+  background: white;
+`;
+
+const TableHeadTH = styled.th`
+  padding: 3px;
+  width: 25vw;
+  background: white;
+
+  &:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+  }
+`;
+
+export {
+  Container,
+  MainWrap,
+  TableWrap,
+  Table,
+  TableBodyTR,
+  TableHeadTR,
+  TableBodyTD,
+  TableBodyTH,
+  TableHeadTH
+};

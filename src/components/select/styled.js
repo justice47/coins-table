@@ -13,8 +13,8 @@ const Wrapper = styled.div`
     grid-area: select;
   }
 
-  min-width: 40ch;
-  max-width: 50ch;
+  width: 100%;
+  max-width: 300px;
 
   border: 1px solid grey;
   border-radius: 0.25em;

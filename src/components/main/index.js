@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
-import { Container, MainWrap } from './styled'
+import {
+  Container,
+  MainWrap,
+  TableWrap,
+  Table,
+  TableBodyTR,
+  TableHeadTR,
+  TableBodyTH,
+  TableHeadTH
+} from './styled'
 import { countPercentage } from '@utils/index'
 import TableCell from '@components/tableCell'
 import Select from '@components/select'
@@ -13,25 +22,38 @@ export default function Main({assetsData}) {
   const [fetchedData, setFetchedData] = useState(filterAssets(assetsData))
   const [fetchInterval, setFetchInterval] = useState()
   const [timeFrame, setTimeFrame] = useState('24h')
+  const [selectedAssetRow, setselectedAssetRow] = useState('')
+  const [selectedAssetColumn, setSelectedAssetColumn] = useState('')
 
   let tableHead = fetchedData
     .map((asset, index) => (
-      <th key={index+1}>{asset.s}</th>
+      <TableHeadTH key={index+1} style={{ backgroundColor: `${asset.s === selectedAssetColumn ? 'cyan' : ''}` }}>{asset.s}</TableHeadTH>
     ))
 
   tableHead = [ <th key={0}></th>, ...tableHead ]
 
+  const tableCellSelect = (assetRow, assetColumn) => {
+    setselectedAssetRow(assetRow)
+    setSelectedAssetColumn(assetColumn)
+  }
+
   const tableBody = fetchedData
     .map((asset, index) => (
-      <tr key={index}>
-        <th>{asset.s}</th>
+      <TableBodyTR key={index}>
+        <TableBodyTH style={{ backgroundColor: `${asset.s === selectedAssetRow ? 'cyan' : ''}` }}>{asset.s}</TableBodyTH>
 
         { fetchedData
           .map((assetSecondary, indexSecondary) => (
-            <TableCell isSame={asset.s === assetSecondary.s} percents={countPercentage(asset.ch, assetSecondary.ch)} key={indexSecondary} />
+            <TableCell
+              isSelected={selectedAssetRow === asset.s && selectedAssetColumn === assetSecondary.s}
+              isSame={asset.s === assetSecondary.s}
+              percents={countPercentage(asset.ch, assetSecondary.ch)}
+              onClick={() => tableCellSelect(asset.s, assetSecondary.s)}
+              key={indexSecondary}
+            />
           ))
         }
-      </tr>
+      </TableBodyTR>
     ))
 
   const timeframeChange = (e) => {
@@ -66,7 +88,7 @@ export default function Main({assetsData}) {
   return (
     <Container>
       <Head>
-        <title>Create Next App</title>
+        <title>Coins table</title>
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
@@ -74,16 +96,18 @@ export default function Main({assetsData}) {
       <MainWrap>
         <Select onChange={timeframeChange}/>
 
-        <table>
-          <thead>
-            <tr>
-              {tableHead}
-            </tr>
-          </thead>
-          <tbody>
-            {tableBody}
-          </tbody>
-        </table>
+        <TableWrap>
+          <Table>
+            <thead>
+              <TableHeadTR>
+                {tableHead}
+              </TableHeadTR>
+            </thead>
+            <tbody>
+              {tableBody}
+            </tbody>
+          </Table>
+        </TableWrap>
       </MainWrap>
 
       <style jsx global>{`
@@ -98,36 +122,6 @@ export default function Main({assetsData}) {
 
         * {
           box-sizing: border-box;
-        }
-
-        tbody tr {
-          height: 30px;
-        }
-
-        tbody td {
-          text-align: center;
-        }
-
-        table tbody th {
-          position: sticky;
-          left: 0;
-          background: white;
-          z-index: 1;
-        }
-
-        table thead th {
-          padding: 3px;
-          position: sticky;
-          top: 0;
-          z-index: 1;
-          width: 25vw;
-          background: white;
-        }
-
-        table thead th:first-child {
-          position: sticky;
-          left: 0;
-          z-index: 2;
         }
 
         *,
